@@ -2,9 +2,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
 public class Client {
     public static void main(String[] args) {
         Socket socket = null;
@@ -14,11 +14,12 @@ public class Client {
             socket = new Socket("localhost", 3345);
 // или Socket socket = new Socket("ИМЯ_СЕРВЕРА", 8071);
             PrintStream ps = new PrintStream(socket.getOutputStream());
-            br = new BufferedReader(new InputStreamReader( socket.getInputStream()));
+            br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             for (int i = 1; i <= 3; i++) {
                 ps.println("GET / HTTP/1.0\r\n\r\n");
                 System.out.println(br.readLine());
-                Thread.sleep(1_000);}
+                Thread.sleep(1_000);
+            }
         } catch (UnknownHostException e) {
 // если не удалось соединиться с сервером
             System.err.println("адрес недоступен" + e);
@@ -34,7 +35,7 @@ public class Client {
                     e.printStackTrace();
                 }
             }
-            if (socket!= null) {
+            if (socket != null) {
                 try {
                     socket.close();
                 } catch (IOException e) {
