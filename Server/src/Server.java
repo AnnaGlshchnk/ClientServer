@@ -46,13 +46,14 @@ class ServerThread extends Thread {
         int i = 0;
         String str;
         try {
-            while ((str = is.readLine()) != null) {
+            str = is.readLine();
+            while (!str.isEmpty()) {
                 System.out.println(str);
                 // if ("GET / HTTP/1.0\r\n\r\n".equals(str)) {
+                str = is.readLine();
+                 }
                 os.println("HTTP/1.1 200 OK\r\n\r\n" + ++i);
-                // }
 
-            }
 
         } catch (IOException e) {
 // если клиент не отвечает, соединение с ним разрывается
