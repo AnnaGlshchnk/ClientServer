@@ -1,5 +1,0 @@
-#!/bin/bash
-cd ~/ClientServer/Client/src/
-rm Client.class
-javac Client.java
-java Client
