@@ -16,6 +16,7 @@ public class Server {
                 Socket socket = server.accept();
                 System.out.println(socket.getLocalPort() + " connected");
                 ServerThread thread = new ServerThread(socket);
+
                 thread.start();
             }
         } catch (IOException e) {
@@ -39,14 +40,11 @@ class ServerThread extends Thread {
         int i = 0;
         String str;
         try {
-            str = is.readLine();
-            while (!str.isEmpty()) {
+            while ((str = is.readLine()) != null) {
                 System.out.println(str);
-                // if ("GET / HTTP/1.0\r\n\r\n".equals(str)) {
-                str = is.readLine();
-            }
-            os.println("HTTP/1.1 200 OK\r\n\r\n" + ++i);
+                os.println("HTTP/1.1 200 OK\r\n\r\n" + ++i);
 
+            }
 
         } catch (IOException e) {
             System.err.println("Disconnect");
