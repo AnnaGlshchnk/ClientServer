@@ -51,8 +51,8 @@ class ServerThread extends Thread {
                 System.out.println(str);
                 // if ("GET / HTTP/1.0\r\n\r\n".equals(str)) {
                 str = is.readLine();
-                 }
-                os.println("HTTP/1.1 200 OK\r\n\r\n" + ++i);
+            }
+            os.println("HTTP/1.1 200 OK\r\n\r\n" + ++i);
 
 
         } catch (IOException e) {
