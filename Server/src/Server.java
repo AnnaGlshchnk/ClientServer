@@ -12,17 +12,10 @@ public class Server {
             ServerSocket server = new ServerSocket(3345);
             System.out.println("initialized");
             while (true) {
-// ожидание клиента
+
                 Socket socket = server.accept();
                 System.out.println(socket.getLocalPort() + " connected");
-/*
-*
-создание
-отдельного потока для обмена данными
-с * соединившимся клиентом
-*/
                 ServerThread thread = new ServerThread(socket);
-// запуск потока
                 thread.start();
             }
         } catch (IOException e) {
@@ -32,9 +25,9 @@ public class Server {
 }
 
 class ServerThread extends Thread {
-    private PrintStream os; // передача
-    private BufferedReader is; // прием
-    private InetAddress addr; // адрес клиента
+    private PrintStream os;
+    private BufferedReader is;
+    private InetAddress addr;
 
     public ServerThread(Socket s) throws IOException {
         os = new PrintStream(s.getOutputStream());
@@ -46,19 +39,19 @@ class ServerThread extends Thread {
         int i = 0;
         String str;
         try {
-            while ((str = is.readLine()) != null) {
+            str = is.readLine();
+            while (!str.isEmpty()) {
                 System.out.println(str);
                 // if ("GET / HTTP/1.0\r\n\r\n".equals(str)) {
-                os.println("HTTP/1.1 200 OK\r\n\r\n" + ++i);
-                // }
-
+                str = is.readLine();
             }
+            os.println("HTTP/1.1 200 OK\r\n\r\n" + ++i);
+
 
         } catch (IOException e) {
-// если клиент не отвечает, соединение с ним разрывается
             System.err.println("Disconnect");
         } finally {
-            disconnect(); // уничтожение потока
+            disconnect();
         }
     }
 
