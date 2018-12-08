@@ -2,4 +2,4 @@
 cd ~/ClientServer/Client/src/
 rm Client.class
 javac Client.java
-java Client
+java Client hello

@@ -42,7 +42,7 @@ class ServerThread extends Thread {
         try {
             while ((str = is.readLine()) != null) {
                 System.out.println(str);
-                os.println("HTTP/1.1 200 OK\r\n\r\n" + ++i);
+                os.println("OK");
 
             }
 

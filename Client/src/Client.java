@@ -6,7 +6,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Client {
-    public static void main(String[] args) {
+    public static void main(String args[]) {
+        String str = args[0];
         Socket socket = null;
         BufferedReader br = null;
         try {
@@ -14,16 +15,14 @@ public class Client {
             PrintStream ps = new PrintStream(socket.getOutputStream());
             br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             for (int i = 1; i <= 3; i++) {
-                ps.println("GET / HTTP/1.0\r\n\r\n");
+                ps.println(str);
                 System.out.println(br.readLine());
-                Thread.sleep(1_000);
+
             }
         } catch (UnknownHostException e) {
             System.err.println("адрес недоступен" + e);
         } catch (IOException e) {
             System.err.println("ошибка I/О потока" + e);
-        } catch (InterruptedException e) {
-            System.err.println("ошибка потока выполнения" + e);
         } finally {
             if (br != null) {
                 try {
