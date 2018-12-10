@@ -1,15 +1,15 @@
 import java.io.*;
-import java.net.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.LinkedList;
 
 public class Server {
 
-    public static LinkedList<ServerSomething> serverList = new LinkedList<>();
+    static LinkedList<ServerSomething> serverList = new LinkedList<>();
 
     public static void main(String[] args) throws IOException {
-        ServerSocket server = new ServerSocket(3345);
-        System.out.println("Server Started");
-        try {
+        try (ServerSocket server = new ServerSocket(3345)) {
+            System.out.println("Server Started");
             while (true) {
                 Socket socket = server.accept();
                 try {
@@ -18,8 +18,6 @@ public class Server {
                     socket.close();
                 }
             }
-        } finally {
-            server.close();
         }
     }
 }
@@ -30,8 +28,7 @@ class ServerSomething extends Thread {
     private BufferedReader in;
     private BufferedWriter out;
 
-
-    public ServerSomething(Socket socket) throws IOException {
+    ServerSomething(Socket socket) throws IOException {
         this.socket = socket;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -42,28 +39,19 @@ class ServerSomething extends Thread {
     public void run() {
         String word;
         try {
-            word = in.readLine();
-            try {
-                out.write(word + "\n");
-                out.flush();
-            } catch (IOException ignored) {
-            }
-            try {
-                while (true) {
-                    word = in.readLine();
-                    if (word.equals("stop")) {
-                        this.downService();
-                        break;
-                    }
-                    System.out.println("Echoing: " + word);
-                    for (ServerSomething vr : Server.serverList) {
-                        vr.send(word);
-                    }
+            String name = in.readLine();
+            System.out.println(name);
+            while (true) {
+                word = in.readLine();
+                if (word.equals("stop")) {
+                    this.downService();
+                    break;
                 }
-            } catch (NullPointerException ignored) {
+                System.out.println("Echoing: " + word);
+                for (ServerSomething vr : Server.serverList) {
+                    vr.send(word);
+                }
             }
-
-
         } catch (IOException e) {
             this.downService();
         }
@@ -73,9 +61,7 @@ class ServerSomething extends Thread {
         try {
             out.write(msg + "\n");
             out.flush();
-        } catch (IOException ignored) {
-        }
-
+        } catch (IOException ignored) { }
     }
 
     private void downService() {
@@ -89,7 +75,6 @@ class ServerSomething extends Thread {
                     Server.serverList.remove(this);
                 }
             }
-        } catch (IOException ignored) {
-        }
+        } catch (IOException ignored) { }
     }
 }
