@@ -61,7 +61,8 @@ class ServerSomething extends Thread {
         try {
             out.write(msg + "\n");
             out.flush();
-        } catch (IOException ignored) { }
+        } catch (IOException ignored) {
+        }
     }
 
     private void downService() {
@@ -75,6 +76,7 @@ class ServerSomething extends Thread {
                     Server.serverList.remove(this);
                 }
             }
-        } catch (IOException ignored) { }
+        } catch (IOException ignored) {
+        }
     }
 }
